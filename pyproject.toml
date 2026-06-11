@@ -54,8 +54,8 @@ Issues = "https://github.com/yourusername/central-limit-theorem-simulation/issue
 [project.scripts]
 clt-sim = "central_limit_theorem_simulation.cli:main"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "black>=23.0",
