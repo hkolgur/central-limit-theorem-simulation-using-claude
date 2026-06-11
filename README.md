@@ -34,7 +34,7 @@ uv sync
 pip install central-limit-theorem-simulation
 ```
 
-## Quick Start
+## Quick Start ##
 
 ### As a Library (With Visualization)
 
