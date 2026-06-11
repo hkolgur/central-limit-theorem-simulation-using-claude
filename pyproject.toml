@@ -44,6 +44,9 @@ docs = [
     "sphinx>=6.0",
     "sphinx-rtd-theme>=1.2",
 ]
+web = [
+    "streamlit>=1.28.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/yourusername/central-limit-theorem-simulation"
@@ -62,6 +65,9 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.0",
     "pre-commit>=3.0",
+]
+web = [
+    "streamlit>=1.28.0",
 ]
 
 [tool.black]

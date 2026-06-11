@@ -82,6 +82,27 @@ uv run python examples/demo_with_saves.py
 # Plots will be saved to visualization_outputs/
 ```
 
+### Running the Streamlit Web Application
+
+For an interactive, modern web interface, use Streamlit:
+
+```bash
+# Install web dependencies
+uv sync --group web
+
+# Run the Streamlit app
+streamlit run app.py
+```
+
+This launches an interactive web application where you can:
+- **Adjust parameters dynamically** using sliders and dropdowns
+- **View real-time statistics** as you change simulation parameters
+- **Explore multiple visualizations** with tabs (Distribution Comparison, Convergence Analysis, Multiple Comparisons)
+- **Learn about CLT** with built-in educational content
+- **Export insights** directly from the web interface
+
+The app runs on `http://localhost:8501` by default.
+
 ## Visualization
 
 The package includes a powerful `CLTVisualizer` class for creating publication-quality plots:
@@ -199,6 +220,9 @@ central-limit-theorem-simulation/
 - `ruff>=0.1.0` - Linter
 - `mypy>=1.0` - Static type checker
 - `pre-commit>=3.0` - Git hooks framework
+
+### Optional Dependencies
+- `streamlit>=1.28.0` - Interactive web interface (use `uv sync --group web`)
 
 ## Configuration
 
