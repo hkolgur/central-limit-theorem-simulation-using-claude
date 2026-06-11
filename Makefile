@@ -24,7 +24,7 @@ install:
 	uv sync
 
 install-dev:
-	uv sync --all-extras
+	uv sync --group dev
 
 test:
 	uv run pytest

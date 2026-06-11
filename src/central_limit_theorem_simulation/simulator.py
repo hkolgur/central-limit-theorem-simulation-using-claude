@@ -15,9 +15,7 @@ class CentralLimitTheoremSimulator:
         Args:
             seed: Random seed for reproducibility.
         """
-        self.seed = seed
-        if seed is not None:
-            np.random.seed(seed)
+        self.rng = np.random.default_rng(seed)
 
     def simulate_uniform(
         self,
@@ -39,7 +37,7 @@ class CentralLimitTheoremSimulator:
         """
         means = []
         for _ in range(n_samples):
-            sample = np.random.uniform(low, high, sample_size)
+            sample = self.rng.uniform(low, high, sample_size)
             means.append(np.mean(sample))
         return np.array(means)
 
@@ -61,7 +59,7 @@ class CentralLimitTheoremSimulator:
         """
         means = []
         for _ in range(n_samples):
-            sample = np.random.exponential(scale, sample_size)
+            sample = self.rng.exponential(scale, sample_size)
             means.append(np.mean(sample))
         return np.array(means)
 
@@ -85,6 +83,6 @@ class CentralLimitTheoremSimulator:
         """
         means = []
         for _ in range(n_samples):
-            sample = np.random.binomial(n, p, sample_size)
+            sample = self.rng.binomial(n, p, sample_size)
             means.append(np.mean(sample))
         return np.array(means)
