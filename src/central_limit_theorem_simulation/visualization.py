@@ -143,7 +143,7 @@ class CLTVisualizer:
         if n_dists == 1:
             axes = [axes]
 
-        for ax, (dist_name, means) in zip(axes, results.items()):
+        for ax, (dist_name, means) in zip(axes, results.items(), strict=False):
             ax.hist(means, bins=30, density=True, alpha=0.7, color='skyblue', edgecolor='black')
 
             # Overlay normal distribution
@@ -198,13 +198,10 @@ class CLTVisualizer:
         # Initial data
         initial_sample_size = min_sample_size
         if distribution_type == "uniform":
-            means = simulator.simulate_uniform(n_samples=n_samples, sample_size=initial_sample_size)
             dist_name = "Uniform Distribution"
         elif distribution_type == "exponential":
-            means = simulator.simulate_exponential(n_samples=n_samples, sample_size=initial_sample_size)
             dist_name = "Exponential Distribution"
         elif distribution_type == "binomial":
-            means = simulator.simulate_binomial(n_samples=n_samples, sample_size=initial_sample_size, **dist_kwargs)
             dist_name = "Binomial Distribution"
         else:
             raise ValueError(f"Unknown distribution type: {distribution_type}")
