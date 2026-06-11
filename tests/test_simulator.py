@@ -1,7 +1,6 @@
 """Tests for the Central Limit Theorem Simulator."""
 
 import numpy as np
-import pytest
 
 from central_limit_theorem_simulation import CentralLimitTheoremSimulator
 

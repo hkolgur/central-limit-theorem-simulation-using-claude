@@ -1,7 +1,6 @@
 """Command Line Interface for Central Limit Theorem Simulator."""
 
 import argparse
-from typing import Optional
 
 from .simulator import CentralLimitTheoremSimulator
 
@@ -50,19 +49,19 @@ def main() -> None:
             n_samples=args.n_samples,
             sample_size=args.sample_size,
         )
-        print(f"Uniform Distribution Results:")
+        print("Uniform Distribution Results:")
     elif args.distribution == "exponential":
         results = simulator.simulate_exponential(
             n_samples=args.n_samples,
             sample_size=args.sample_size,
         )
-        print(f"Exponential Distribution Results:")
+        print("Exponential Distribution Results:")
     elif args.distribution == "binomial":
         results = simulator.simulate_binomial(
             n_samples=args.n_samples,
             sample_size=args.sample_size,
         )
-        print(f"Binomial Distribution Results:")
+        print("Binomial Distribution Results:")
 
     print(f"Mean: {results.mean():.4f}")
     print(f"Std Dev: {results.std():.4f}")
