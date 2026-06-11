@@ -166,3 +166,123 @@ class CLTVisualizer:
             print(f"✅ Plot saved to: {output_path}")
 
         plt.show()
+
+    def plot_interactive_sample_size(
+        self,
+        simulator,
+        distribution_type: str = "uniform",
+        n_samples: int = 500,
+        min_sample_size: int = 2,
+        max_sample_size: int = 100,
+        **dist_kwargs,
+    ) -> None:
+        """Create interactive plot with slider to morph distribution by sample size.
+
+        Allows real-time observation of how sample size (n) affects the distribution
+        shape, demonstrating the Central Limit Theorem's convergence to normality.
+
+        Args:
+            simulator: CentralLimitTheoremSimulator instance.
+            distribution_type: Type of distribution ('uniform', 'exponential', 'binomial').
+            n_samples: Number of samples to draw.
+            min_sample_size: Minimum sample size (default: 2).
+            max_sample_size: Maximum sample size (default: 100).
+            **dist_kwargs: Additional arguments for the distribution function.
+        """
+        from matplotlib.widgets import Slider
+
+        # Create figure with space for slider
+        fig, (ax_hist, ax_qq) = plt.subplots(1, 2, figsize=(15, 6))
+        plt.subplots_adjust(bottom=0.25)
+
+        # Initial data
+        initial_sample_size = min_sample_size
+        if distribution_type == "uniform":
+            means = simulator.simulate_uniform(n_samples=n_samples, sample_size=initial_sample_size)
+            dist_name = "Uniform Distribution"
+        elif distribution_type == "exponential":
+            means = simulator.simulate_exponential(n_samples=n_samples, sample_size=initial_sample_size)
+            dist_name = "Exponential Distribution"
+        elif distribution_type == "binomial":
+            means = simulator.simulate_binomial(n_samples=n_samples, sample_size=initial_sample_size, **dist_kwargs)
+            dist_name = "Binomial Distribution"
+        else:
+            raise ValueError(f"Unknown distribution type: {distribution_type}")
+
+        # Function to update plots
+        def update_plots(sample_size: int) -> None:
+            """Update both plots based on current sample size."""
+            sample_size = int(sample_size)
+
+            # Generate new samples
+            if distribution_type == "uniform":
+                new_means = simulator.simulate_uniform(n_samples=n_samples, sample_size=sample_size)
+            elif distribution_type == "exponential":
+                new_means = simulator.simulate_exponential(n_samples=n_samples, sample_size=sample_size)
+            elif distribution_type == "binomial":
+                new_means = simulator.simulate_binomial(n_samples=n_samples, sample_size=sample_size, **dist_kwargs)
+
+            # Clear previous plots
+            ax_hist.clear()
+            ax_qq.clear()
+
+            # Update histogram with normal curve
+            ax_hist.hist(new_means, bins=30, density=True, alpha=0.7, color='skyblue', edgecolor='black')
+
+            mu, sigma = new_means.mean(), new_means.std()
+            x = np.linspace(new_means.min(), new_means.max(), 100)
+            ax_hist.plot(x, 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-0.5 * ((x - mu) / sigma) ** 2),
+                        'r-', linewidth=2.5, label='Normal Distribution')
+
+            ax_hist.set_xlabel('Sample Mean', fontsize=11, fontweight='bold')
+            ax_hist.set_ylabel('Density', fontsize=11, fontweight='bold')
+            ax_hist.set_title(f'{dist_name}\nn={sample_size} | μ={mu:.4f} | σ={sigma:.4f}',
+                            fontsize=12, fontweight='bold')
+            ax_hist.legend(fontsize=10)
+            ax_hist.grid(True, alpha=0.3)
+
+            # Update Q-Q plot
+            sorted_means = np.sort(new_means)
+            theoretical_quantiles = np.sort(np.random.standard_normal(len(new_means)))
+            ax_qq.scatter(theoretical_quantiles, sorted_means, alpha=0.6, s=25, color='steelblue')
+
+            min_val = min(theoretical_quantiles.min(), sorted_means.min())
+            max_val = max(theoretical_quantiles.max(), sorted_means.max())
+            ax_qq.plot([min_val, max_val], [min_val, max_val], 'r--', linewidth=2, label='Perfect Normal')
+
+            ax_qq.set_xlabel('Theoretical Quantiles', fontsize=11, fontweight='bold')
+            ax_qq.set_ylabel('Sample Quantiles', fontsize=11, fontweight='bold')
+            ax_qq.set_title(f'{dist_name}\nQ-Q Plot (n={sample_size})', fontsize=12, fontweight='bold')
+            ax_qq.legend(fontsize=10)
+            ax_qq.grid(True, alpha=0.3)
+
+            fig.canvas.draw_idle()
+
+        # Create slider
+        ax_slider = plt.axes([0.2, 0.1, 0.6, 0.03])
+        slider = Slider(
+            ax_slider,
+            'Sample Size (n)',
+            min_sample_size,
+            max_sample_size,
+            valinit=initial_sample_size,
+            valstep=1,
+            color='steelblue'
+        )
+
+        # Connect slider to update function
+        slider.on_changed(lambda val: update_plots(int(val)))
+
+        # Initial plot
+        update_plots(initial_sample_size)
+
+        fig.suptitle('Central Limit Theorem: Interactive Sample Size Explorer',
+                    fontsize=14, fontweight='bold', y=0.98)
+
+        print("\n📊 Interactive Slider Controls:")
+        print("  • Drag the slider to change sample size (n)")
+        print("  • Watch the distribution morph from jagged (small n) to smooth (large n)")
+        print("  • Q-Q plot shows convergence to normality")
+        print("  • Close the window to exit\n")
+
+        plt.show()
