@@ -311,7 +311,7 @@ class CLTVisualizer:
             fig.canvas.draw_idle()
 
         # Create slider
-        ax_slider = plt.axes([0.2, 0.1, 0.6, 0.03])
+        ax_slider = plt.axes((0.2, 0.1, 0.6, 0.03))
         slider = Slider(
             ax_slider,
             "Sample Size (n)",
