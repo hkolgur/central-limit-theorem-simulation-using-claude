@@ -5,5 +5,6 @@ __author__ = "Your Name"
 __email__ = "your.email@example.com"
 
 from .simulator import CentralLimitTheoremSimulator
+from .visualization import CLTVisualizer
 
-__all__ = ["CentralLimitTheoremSimulator"]
+__all__ = ["CentralLimitTheoremSimulator", "CLTVisualizer"]
